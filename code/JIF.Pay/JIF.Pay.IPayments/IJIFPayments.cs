@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JIF.Pay.IPayments
 {
-    public interface IJWPayments
+    public interface IJIFPayments
     {
     }
 }
