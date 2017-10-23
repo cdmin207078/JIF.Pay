@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<br />
+<div class="row">
+    <div class="col-md-12">
+
+
+        <div class="form-group">
+            <label for="txtOrderNo">订单编号</label>
+            <input type="text" class="form-control" id="txtOrderNo" placeholder="订单编号">
+        </div>
+
+        <div class="form-group">
+            <label for="txtOrderNo">订单主题</label>
+            <input type="text" class="form-control" id="txtSubject" placeholder="订单主题">
+        </div>
+
+        <div class="form-group">
+            <label for="txtRemark">描述</label>
+            <textarea class="form-control" id="txtRemark" placeholder="描述"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="txtAmount">金额</label>
+            <input type="number" class="form-control" id="txtAmount" placeholder="金额">
+        </div>
+
+        <button class="btn btn-primary" id="btnAliPay">支付宝</button>
+        <button class="btn btn-success" id="btnWeChatPay">微信</button>
+
+    </div>
+</div>
+
+@section Script{
+    <script type="text/javascript">
+
+        var getData = function () {
+            return {
+                OrderNo: $('#txtOrderNo').val().trim(),
+                Subject: $('#txtSubject').val().trim(),
+                Remark: $('#txtRemark').val().trim(),
+                Amount: $('#txtAmount').val().trim()
+            };
+        }
+
+        $(function () {
+
+            $('#btnAliPay').click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/home/alipay',
+                    data: getData(),
+                    success: function (ret) {
+                        console.log(ret);
+                    }
+                });
+            });
+
+
+            $('#btnWeChatPay').click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/home/wechat',
+                    data: getData(),
+                    success: function (ret) {
+                        console.log(ret);
+                    }
+                });
+            });
+        });
+    </script>
+}
