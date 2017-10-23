@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JIF.Pay.Alipay", "JIF.Pay.Alipay\JIF.Pay.Alipay.csproj", "{B15A3758-17FA-4089-ADCF-0E7984EB936F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JIF.Pay.Wechat", "JIF.Pay.Wechat\JIF.Pay.Wechat.csproj", "{045DA26C-8B38-4F15-984D-DECC3B107FF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{7AA5983E-D975-44BE-8E08-2281026BEE69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JIF.Pay.IPayments", "JIF.Pay.IPayments\JIF.Pay.IPayments.csproj", "{936C6AAB-EBDA-429B-A809-06241D2DCA92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JIF.Pay.Alipay.Test", "JIF.Pay.Alipay.Test\JIF.Pay.Alipay.Test.csproj", "{DD798246-A3AE-4B7A-8BDA-32A699746B61}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B15A3758-17FA-4089-ADCF-0E7984EB936F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B15A3758-17FA-4089-ADCF-0E7984EB936F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B15A3758-17FA-4089-ADCF-0E7984EB936F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B15A3758-17FA-4089-ADCF-0E7984EB936F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{045DA26C-8B38-4F15-984D-DECC3B107FF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{045DA26C-8B38-4F15-984D-DECC3B107FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{045DA26C-8B38-4F15-984D-DECC3B107FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{045DA26C-8B38-4F15-984D-DECC3B107FF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{936C6AAB-EBDA-429B-A809-06241D2DCA92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{936C6AAB-EBDA-429B-A809-06241D2DCA92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{936C6AAB-EBDA-429B-A809-06241D2DCA92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{936C6AAB-EBDA-429B-A809-06241D2DCA92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD798246-A3AE-4B7A-8BDA-32A699746B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD798246-A3AE-4B7A-8BDA-32A699746B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD798246-A3AE-4B7A-8BDA-32A699746B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD798246-A3AE-4B7A-8BDA-32A699746B61}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DD798246-A3AE-4B7A-8BDA-32A699746B61} = {7AA5983E-D975-44BE-8E08-2281026BEE69}
+	EndGlobalSection
+EndGlobal
