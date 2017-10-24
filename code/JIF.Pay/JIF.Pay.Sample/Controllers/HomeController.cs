@@ -3,12 +3,17 @@ using Aop.Api.Domain;
 using Aop.Api.Request;
 using Aop.Api.Response;
 using Aop.Api.Util;
+using Gma.QrCodeNet.Encoding;
+using Gma.QrCodeNet.Encoding.Windows.Render;
 using JIF.Pay.Sample.App_Start;
 using JIF.Pay.Sample.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,23 +36,32 @@ namespace JIF.Pay.Sample.Controllers
             DefaultAopClient client = new DefaultAopClient(config.gatewayUrl, config.app_id, config.private_key, "json", "1.0", config.sign_type, config.alipay_public_key, config.charset, false);
 
             // 组装业务参数model
+            //AlipayTradePayModel model = new AlipayTradePayModel();
+            //AlipayTradePagePayModel model = new AlipayTradePagePayModel();
             AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
-            model.Body = order.Remark.Trim();                                      // 商品描述
-            model.Subject = order.Subject.Trim();                                // 订单名称
-            model.TotalAmount = order.Amount.ToString("0.##");                        // 付款金额
-            model.OutTradeNo = order.OrderNo;                        // 外部订单号，商户网站订单系统中唯一的订单号
-            model.ProductCode = "QUICK_WAP_PAY";
-            //model.QuitUrl = quit_url;                               // 支付中途退出返回商户网站地址
+            model.Body = order.Remark.Trim();                                       // 商品描述
+            model.Subject = order.Subject.Trim();                                   // 订单名称
+            model.TotalAmount = order.Amount.ToString("0.##");                      // 付款金额
+            model.OutTradeNo = order.OrderNo;                                       // 外部订单号，商户网站订单系统中唯一的订单号
+            model.ProductCode = "FAST_INSTANT_TRADE_PAY";                           // pc web 页面，必须加上。 - chenning
+            //model.ProductCode = "QUICK_WAP_PAY";
+            //model.QuitUrl = quit_url;                                             // 支付中途退出返回商户网站地址
 
+            //AlipayTradePayRequest request = new AlipayTradePayRequest();
+            //AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
             AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
+
             // 设置支付完成同步回调地址
             request.SetReturnUrl("");
             // 设置支付完成异步通知接收地址
-            request.SetNotifyUrl("http://192.168.0.107:30001/home/AlipayCallback");
+            request.SetNotifyUrl("");
             // 将业务model载入到request
             request.SetBizModel(model);
 
+            //AlipayTradePayResponse response = null;
+            //AlipayTradePagePayResponse response = null;
             AlipayTradeWapPayResponse response = null;
+
             try
             {
                 response = client.pageExecute(request, null, "post");
@@ -59,6 +73,93 @@ namespace JIF.Pay.Sample.Controllers
             }
         }
 
+        public ActionResult Alipay_QRcode(string orderNo)
+        {
+            var order = new CreateOrderInputViewModel
+            {
+                OrderNo = orderNo,
+                Amount = 2,
+                Remark = "备注 - 18点03分",
+                Subject = "主题 - 18点03分"
+            };
+
+            DefaultAopClient client = new DefaultAopClient(config.gatewayUrl, config.app_id, config.private_key, "json", "1.0", config.sign_type, config.alipay_public_key, config.charset, false);
+
+            // 组装业务参数model
+            AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
+
+            model.Body = order.Remark.Trim();                                       // 商品描述
+            model.Subject = order.Subject.Trim();                                   // 订单名称
+            model.TotalAmount = order.Amount.ToString("0.##");                      // 付款金额
+            model.OutTradeNo = order.OrderNo;                                       // 外部订单号，商户网站订单系统中唯一的订单号
+            //model.ProductCode = "FAST_INSTANT_TRADE_PAY";                           // pc web 页面，必须加上。 - chenning
+            //model.ProductCode = "QUICK_WAP_PAY";
+            //model.QuitUrl = quit_url;                                             // 支付中途退出返回商户网站地址
+
+            AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
+            // 将业务model载入到request
+            request.SetBizModel(model);
+
+            AlipayTradePrecreateResponse response = null;
+
+            try
+            {
+                response = client.Execute(request);
+
+                var ms = GenerateQRCode(response.QrCode);
+
+                //BinaryReader br = new BinaryReader(ms);
+
+                //byte[] imageBuffer = new byte[br.BaseStream.Length];
+                //br.Read(imageBuffer, 0, Convert.ToInt32(br.BaseStream.Length));
+                //string textString = System.Convert.ToBase64String(imageBuffer);
+
+                //// response.QrCode: https://qr.alipay.com/bax04276ca83ytuno3x10065
+
+                //var filename = DateTime.Now.ToString("yyyyMMddHHmmss") + "0000" + (new Random()).Next(1, 10000).ToString() + ".png";
+                //var savePath = Server.MapPath("~/images/") + filename;
+
+                //var bm = System.Drawing.Image.FromStream(ms, true);
+
+                //bm.Save(savePath, ImageFormat.Jpeg);
+                //return AjaxOk("支付宝 - 成功", savePath);
+
+                //return AjaxOk(textString);
+
+                return File(ms.ToArray(), "image/jpeg");
+            }
+            catch (Exception exp)
+            {
+                return AjaxFail("支付宝 - 失败", JsonConvert.SerializeObject(exp));
+            }
+        }
+
+        public ActionResult GetImg()
+        {
+            Bitmap bmp = new Bitmap(100, 35);
+            Graphics g = Graphics.FromImage(bmp);
+            g.Clear(Color.White);
+            g.FillRectangle(Brushes.Red, 2, 2, 65, 31);
+            g.DrawString("学习MVC", new Font("黑体", 15f), Brushes.Yellow, new PointF(5f, 5f));
+            MemoryStream ms = new MemoryStream();
+            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            g.Dispose();
+            bmp.Dispose();
+            return File(ms.ToArray(), "image/jpeg");
+        }
+
+        private MemoryStream GenerateQRCode(string link)
+        {
+            QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
+            QrCode qrCode = new QrCode();
+            qrEncoder.TryEncode(link, out qrCode);
+
+            GraphicsRenderer renderer = new GraphicsRenderer(new FixedModuleSize(4, QuietZoneModules.Four));
+            MemoryStream ms = new MemoryStream();
+            renderer.WriteToStream(qrCode.Matrix, ImageFormat.Png, ms);
+
+            return ms;
+        }
 
         public JsonResult AlipayQuery(string orderNo, string aliBusinessOrderNo)
         {
